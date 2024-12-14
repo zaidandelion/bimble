@@ -10,6 +10,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chats</title>
     <style>
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .user-list {
+            width: 300px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-item:hover {
+            background-color: #d6b68e;
+        }
+
+        .user-item img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .user-item .user-info {
+            flex-grow: 1;
+        }
+
+        .user-item .user-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-item .message-preview {
+            color: #777;
+        }
+
+        .chat-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message .sender {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .message.received .text {
+            background-color: #f1f1f1; /* Light grey for received messages */
+            color: #333; /* Dark text color for visibility */
+            align-self: flex-start;
+            border-radius: 12px 12px 12px 0;
+        }
+
+        .message.sent .text {
+            background-color: #d6b68e; /* Gold color for "You" messages */
+            color: white; /* White text for better readability */
+            align-self: flex-end;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        .message.sent .text {
+            padding: 10px;
+            background-color: #D6B68E; /* More prominent gold for "You" */
+            color: white;
+        }
+
+        .message.sent {
+            flex-direction: row-reverse; /* Makes "You" messages align to the right */
+        }
+        
+        .message.received .text {
+            padding: 10px;
+            background-color: #e1e1e1; /* A subtle light grey */
+        }
+
+        .message.received {
+            flex-direction: row; /* Makes other messages align to the left */
+        }
+
+        .input-container {
+            display: flex;
+            background-color: #fff;
+            /* border-top: 1px solid #ddd; */
+        }
+
+        .input-container input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .send-button {
+            padding: 10px 16px;
+            border: none;
+            background-color: #D6B68e;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .send-button:hover {
+            background-color: #c7a570;
+        }
+
+        .send-button i {
+            font-size: 16px;
+        }
+        .user-item.active {
+            background-color: #d6b68e;
+            font-weight: bold; 
+        }
     
     </style>
 </head>
@@ -35,5 +173,123 @@
             </div>
         </div>
     </div>
+
+    
+    <div class="main-container">
+
+        <!-- Left sidebar with user list -->
+        <div class="user-list">
+            <div class="user-item" onclick="loadChat('john')">
+                <img src="profile-pic-1.jpg" alt="User 1">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="message-preview">Hey, what's up?</div>
+                </div>
+            </div>
+            <div class="user-item" onclick="loadChat('jane')">
+                <img src="profile-pic-2.jpg" alt="User 2">
+                <div class="user-info">
+                    <div class="user-name">Jane Smith</div>
+                    <div class="message-preview">Let's meet later.</div>
+                </div>
+            </div>
+            <div class="user-item" onclick="loadChat('sam')">
+                <img src="profile-pic-3.jpg" alt="User 3">
+                <div class="user-info">
+                    <div class="user-name">Sam Brown</div>
+                    <div class="message-preview">Got your message!</div>
+                </div>
+            </div>
+            <!-- Add more users here -->
+        </div>
+
+        <!-- Right side - Chat interface -->
+        <div class="chat-container" id="chat-container">
+            <div class="messages" id="messages">
+                <!-- Messages will load dynamically here -->
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button class="send-button" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data for each user's chat (could be dynamically loaded from a database)
+        const chats = {
+            john: [
+                { sender: "John", text: "Hey, what's up?" },
+                { sender: "You", text: "I'm good, thanks!" },
+                { sender: "John", text: "Let's catch up soon!" }
+            ],
+            jane: [
+                { sender: "Jane", text: "Let's meet later." },
+                { sender: "You", text: "Sounds good!" },
+                { sender: "Jane", text: "I'll text you when I'm free." }
+            ],
+            sam: [
+                { sender: "Sam", text: "Got your message!" },
+                { sender: "You", text: "Great!" },
+                { sender: "Sam", text: "Let's talk soon." },
+                { sender: "Sam", text: "Got your message!" },
+                { sender: "You", text: "Great!" },
+                { sender: "Sam", text: "Let's talk soon." },
+                { sender: "Sam", text: "Got your message!" },
+                { sender: "You", text: "Great!" },
+                { sender: "Sam", text: "Let's talk soon." },
+                { sender: "Sam", text: "Got your message!" },
+                { sender: "You", text: "Great!" },
+                { sender: "Sam", text: "Let's talk soon." }
+            ]
+        };
+
+        // Function to load the chat for a specific user
+        function loadChat(user) {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = ''; // Clear existing messages
+
+            const chat = chats[user];
+            chat.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', message.sender === 'You' ? 'sent' : 'received');
+                messageElement.innerHTML = `
+                    <span class="sender">${message.sender}:</span>
+                    <span class="text">${message.text}</span>
+                `;
+                messagesContainer.appendChild(messageElement);
+            });
+
+            const userItems = document.querySelectorAll('.user-item');
+            userItems.forEach(item => item.classList.remove('active')); // Remove active class from all users
+            const activeItem = document.querySelector(`.user-item[onclick="loadChat('${user}')"]`);
+            if (activeItem) {
+                activeItem.classList.add('active'); // Add active class to clicked user
+            }
+
+            document.getElementById('message-input').focus();
+        }
+
+        // Function to send a message
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const messageText = messageInput.value.trim();
+            if (messageText) {
+                const messagesContainer = document.getElementById('messages');
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'sent');
+                messageElement.innerHTML = `
+                    <span class="sender">You:</span>
+                    <span class="text">${messageText}</span>
+                `;
+                messagesContainer.appendChild(messageElement);
+                messageInput.value = ''; // Clear input field
+                messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to bottom
+            }
+        }
+    </script>
+
 </body>
 </html>
