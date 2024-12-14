@@ -85,19 +85,20 @@
         </div>
     </div>
 
-        <div class="container-fluid" style="display: flex; justify-content: flex-end;">
-            <button class="notif-read-all" onclick="markAllAsRead()">Read all</button>
-            <button class="notif-clear-all" onclick="clearAllNotifications()">Clear All</button>
-        </div>
-        <div class="notification-list" style="margin-top: 10px;">
-            <ul id="notificationUl">
-                <li><a href="">Notification 1: You have a new message.</a></li>
-                <li><a href="">Notification 2: Your profile was viewed.</a></li>
-                <li><a href="">Notification 3: You have a new friend request.</a></li>
-                <li><a href="">Notification 4: Your password was changed successfully.</a></li>
-                <li><a href="">Notification 5: You have a new comment on your post.</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid" style="display: flex; justify-content: flex-end;">
+        <button class="notif-read-all" onclick="markAllAsRead()">Read all</button>
+        <button class="notif-clear-all" onclick="clearAllNotifications()">Clear All</button>
+    </div>
+    <div class="notification-list" style="margin-top: 10px;">
+        <ul id="notificationUl">
+            <li><a href="">Notification 1: You have a new message.</a></li>
+            <li><a href="">Notification 2: Your profile was viewed.</a></li>
+            <li><a href="">Notification 3: You have a new friend request.</a></li>
+            <li><a href="">Notification 4: Your password was changed successfully.</a></li>
+            <li><a href="">Notification 5: You have a new comment on your post.</a></li>
+        </ul>
+        <div id="noNotifications" style="display: none;">No new notifications</div>
+    </div>
 
         <div id="customAlert" class="modal">
             <div class="modal-content">
@@ -167,10 +168,24 @@
                 });
             }
         
-            document.querySelectorAll('#notificationUl li', '#notificationList a').forEach(notification => {
-    notification.addEventListener('click', function() {
-        toggleRead(this); // Toggle read status on click
-    });
+        document.querySelectorAll('#notificationUl li', '#notificationList a').forEach(notification => {
+        notification.addEventListener('click', function() {
+            toggleRead(this); // Toggle read status on click
+        });
+
+        function checkNotifications() {
+        const notificationUl = document.getElementById('notificationUl');
+        const noNotificationsDiv = document.getElementById('noNotifications');
+
+        if (notificationUl.children.length === 0) {
+            noNotificationsDiv.style.display = 'block';
+        } else {
+            noNotificationsDiv.style.display = 'none';
+        }
+    }
+
+    // Call this function to check notifications when the page loads or notifications change
+    checkNotifications();
 });
         </script>
 </body>

@@ -11,7 +11,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bimble</title>
     <style>
+      
+    /* Pop-up and Overlay Styling */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #d2b48c;
+      width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      text-align: center;
+    }
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .popup-header .close-btn {
+      cursor: pointer;
+      color: #333;
+    }
+    .popup-content {
+      padding: 15px;
+    }
+    .popup-content img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
+    .popup-content h1 {
+      margin: 2px 0;
+      font-size: 24px;
+      text-align: left; padding-left: 20px;
+    }
+    .popup-content p {
+      font-size: 14px;
+      text-align: left; padding-left: 20px;
+    }
+    .message-box {
+      display: flex;
+      margin-top: 10px;
+    }
+    .message-box input {
+      flex: 1;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+    }
+    .message-box button {
+      border: none;
+      background: #ddd;
+      padding: 5px 10px;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
 
+    /* Gallery styles */
+    .gallery {
+      text-align: center; 
+    }
+
+    .gallery img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      height: auto; 
+      border-radius: 8px;
+    }
+
+    .gallery-controls {
+      margin: 4px 0; 
+    }
+
+    .gallery-controls button {
+      background-color: #D6B68e;
+      color: white; 
+      border: none;
+      padding: 4px;
+      cursor: pointer; 
+      border-radius: 5px; 
+      margin: 0 5px;
+    }
+
+    /* .gallery-controls button:hover {
+      background-color: #ccc; 
+    } */
     </style>
 </head>
 <body>
@@ -47,8 +147,8 @@
 
 <div class="container-fluid" style="margin-top: 2px; font-family: helvetica;">
     <div class="pet-cards-flex">
-        <div class="pet-card" data-name="Alexis" data-age="4" data-gender="Male" data-breed="Breed" data-location="San Jose City, Nueva Ecija" data-image="tagline.png">
-            <a href="" style="text-decoration: none;">
+        <div class="pet-card">
+            <a href="#" id="showPopup" style="text-decoration: none;">
             <img src="tagline.png" alt="Alexis the Cat">
             <div class="pet-info">
               <h1>Alexis (4), M</h1>
@@ -111,42 +211,93 @@
               <i class="fa fa-heart"></i>
             </div>
         </div>
-
     </div>
   </div>
+
+  <!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Pop-up -->
+<div class="popup" id="popup">
+  <div class="popup-header">
+    <span class="close-btn" id="closePopup">X</span>
+  </div>
+  <div class="popup-content">
+    <div class="gallery">
+      <img src="tagline.png" id="galleryImage" alt="Alexis">
+      <br>
+      <div class="gallery-controls">
+        <button id="prevBtn">❮</button>
+        <button id="nextBtn">❯</button>
+      </div>
+    </div>
+    <h1>Alexis</h1>
+    <p>Male | 4 <i>(Breed)</i></p>
+    <p>📍 San Jose City, Nueva Ecija</p>
+    <div class="message-box">
+      <input type="text" placeholder="Send a message...">
+      <button>➤</button>
+    </div>
+  </div>
+</div>
 
   <script>
     const heartIcons = document.querySelectorAll('.heart-icon');
 
-heartIcons.forEach(icon => {
-  icon.addEventListener('click', () => {
-    icon.classList.toggle('clicked');
-  });
-});
+    heartIcons.forEach(icon => {
+      icon.addEventListener('click', () => {
+        icon.classList.toggle('clicked');
+      });
+    });
 
-  // Get elements
-  const openPopup = document.getElementById("openPopup");
+// Elements
+const showPopup = document.getElementById("showPopup");
   const closePopup = document.getElementById("closePopup");
-  const popup = document.getElementById("popup");
   const overlay = document.getElementById("overlay");
+  const popup = document.getElementById("popup");
 
-  // Open the pop-up
-  openPopup.addEventListener("click", function(event) {
-    event.preventDefault(); // Prevent link behavior
-    popup.style.display = "block";
+  // Show pop-up
+  showPopup.addEventListener("click", function (e) {
+    e.preventDefault();
     overlay.style.display = "block";
+    popup.style.display = "block";
   });
 
-  // Close the pop-up
-  closePopup.addEventListener("click", function() {
-    popup.style.display = "none";
+  // Hide pop-up
+  closePopup.addEventListener("click", function () {
     overlay.style.display = "none";
+    popup.style.display = "none";
   });
 
-  // Close when clicking on overlay
-  overlay.addEventListener("click", function() {
-    popup.style.display = "none";
+  // Close overlay
+  overlay.addEventListener("click", function () {
     overlay.style.display = "none";
+    popup.style.display = "none";
+  });
+
+  const images = [
+    'ginger/ginger1.jpg',
+    'ginger/ginger2.jpg',
+    'ginger/ginger3.jpg' // Add more image paths as needed
+  ];
+  let currentIndex = 0;
+
+  const galleryImage = document.getElementById('galleryImage');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function updateImage() {
+    galleryImage.src = images[currentIndex];
+  }
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+    updateImage();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+    updateImage();
   });
 </script>
 
