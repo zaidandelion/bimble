@@ -260,12 +260,11 @@ cursor: pointer;
   position: absolute;
   z-index: 1000;
   background-color: white;
-  border: 1px solid #ccc;
   border-radius: 5px;
   max-height: 150px;
   overflow-y: auto;
   list-style: none;
-  padding: 0;
+  padding-left: 20px;
   margin: 0;
 }
 
@@ -275,7 +274,7 @@ cursor: pointer;
 }
 
 .autocomplete-item:hover {
-  background-color: #f0f0f0;
+  background-color: #D6B68e;
 }
 
 

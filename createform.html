@@ -86,6 +86,7 @@
                 <label for="location">Location:</label><br>
                 <input type="text" id="location" name="location" placeholder="Start typing your location..." autocomplete="off" required>
                 <ul id="autocomplete-results" class="autocomplete-dropdown"></ul>
+                <br><br>
                 <div style="text-align: center;">
                     <input type="submit" value="Submit" class="create-profile-btn">
                 </div>
@@ -110,58 +111,30 @@
             }
         }
 
-        let autocompleteService;
-        let sessionToken;
-        const resultsDropdown = document.getElementById('autocomplete-results');
         const locationInput = document.getElementById('location');
+        const resultsDropdown = document.getElementById('autocomplete-results');
 
-        // Initialize Google Maps API and Autocomplete Service
-        function initializeAutocomplete() {
-            // Create a new session token for each session
-            sessionToken = new google.maps.places.AutocompleteSessionToken();
-            autocompleteService = new google.maps.places.AutocompleteService();
-        }
-
-        // Handle input changes and fetch autocomplete results
         locationInput.addEventListener('input', () => {
             const query = locationInput.value.trim();
-
             if (query.length > 2) {
-                autocompleteService.getPlacePredictions(
-                    { input: query, sessionToken },
-                    displayAutocompleteResults
-                );
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsDropdown.innerHTML = '';
+                        data.forEach(place => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = place.display_name;
+                            listItem.onclick = () => {
+                                locationInput.value = place.display_name;
+                                resultsDropdown.innerHTML = '';
+                            };
+                            resultsDropdown.appendChild(listItem);
+                        });
+                    });
             } else {
-                clearAutocompleteResults();
+                resultsDropdown.innerHTML = '';
             }
         });
-
-        // Display autocomplete results in the dropdown
-        function displayAutocompleteResults(predictions, status) {
-            clearAutocompleteResults();
-
-            if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
-                predictions.forEach((prediction) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = prediction.description;
-                    listItem.classList.add('autocomplete-item');
-                    listItem.onclick = () => selectLocation(prediction.description);
-                    resultsDropdown.appendChild(listItem);
-                });
-            }
-        }
-
-        // Handle selection of a location
-        function selectLocation(selectedLocation) {
-            locationInput.value = selectedLocation;
-            clearAutocompleteResults();
-        }
-
-        // Clear dropdown results
-        function clearAutocompleteResults() {
-            resultsDropdown.innerHTML = '';
-        }
-
 
     </script>
 
