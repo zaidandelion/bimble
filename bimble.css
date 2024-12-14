@@ -1,3 +1,7 @@
+*{
+  font-family: Helvetica;
+}
+
 .flex-container {
   display: flex;
   flex-direction: wrap;
@@ -186,6 +190,72 @@ font-size: 36px;
 color: red; /* Red color on click */
 }
 
+.create-form-container {
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 480px;
+  width: 100%; 
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #D6B68F;
+  border-radius: 25px;
+}
+
+
+input[type=text], 
+input[type=date]{
+  border: none;
+  border-radius: 15px;
+  padding: 16px;
+  width: 100%;
+  height: 36px;
+}
+
+select{
+  border: none;
+  padding-left: 16px;
+  border-radius: 15px;
+  width: 100%;
+  height: 36px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  border-radius: 20px;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.create-form-container input:focus,
+.create-form-container select:focus,
+.create-form-container date:focus {
+  outline: none;
+  border-color: #335288;
+  outline: 2px solid #335288;
+}
+
+.create-profile-btn{
+  border: none;
+  outline: none;
+  background-color: #335288;
+  color: white;
+  border-radius: 36px;
+  padding: 6px;
+  width: 30%;
+  transition: 0.2s ease;
+}
+
+.create-profile-btn:hover{
+outline: none;
+color: black;
+background-color: white;
+cursor: pointer;
+}
+
 
 
 @media (max-width: 800px) {
@@ -199,7 +269,6 @@ color: red; /* Red color on click */
       height: auto;
   }
 }
-
 
 @media (max-width: 600px) {
   .flex-container {
