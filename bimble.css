@@ -264,17 +264,15 @@ cursor: pointer;
   max-height: 150px;
   overflow-y: auto;
   list-style: none;
-  padding-left: 20px;
+  padding-left: 2px;
   margin: 0;
-}
-
-.autocomplete-item {
-  padding: 10px;
   cursor: pointer;
 }
 
-.autocomplete-item:hover {
-  background-color: #D6B68e;
+
+.autocomplete-dropdown li:hover {
+  background-color: #2a3e6d;
+  color: white;
 }
 
 
