@@ -245,7 +245,7 @@ input[type="file"] {
   color: white;
   border-radius: 36px;
   padding: 6px;
-  width: 30%;
+  width: 40%;
   transition: 0.2s ease;
 }
 
@@ -269,8 +269,29 @@ cursor: pointer;
   cursor: pointer;
 }
 
-
 .autocomplete-dropdown li:hover {
+  background-color: #2a3e6d;
+  color: white;
+}
+
+#breed-autocomplete-results {
+  border-radius: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  background: white;
+  z-index: 1000;
+}
+
+#breed-autocomplete-results li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+#breed-autocomplete-results li:hover {
   background-color: #2a3e6d;
   color: white;
 }

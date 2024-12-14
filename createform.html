@@ -24,16 +24,7 @@
             object-fit: cover; /* Ensure the image covers the entire circle */
         }
     </style>
-    <script>
-        function toggleOtherBreedInput(selectElement) {
-            const otherBreedInput = document.getElementById('other-breed-input');
-            if (selectElement.value === 'Others') {
-                otherBreedInput.style.display = 'block'; // Show input if "Others" is selected
-            } else {
-                otherBreedInput.style.display = 'none'; // Hide input otherwise
-            }
-        }
-    </script>
+
 </head>
 <body>
     <div style="margin: 40px 80px 40px 80px;">
@@ -50,31 +41,14 @@
                 </div>
                 <br>
                 <label for="petname">Name of Pet: </label>
-                    <input type="text" id="petname" name="petname" required>
+                    <input type="text" id="petname" name="petname" placeholder="What is your pet name?" required>
                 <br><br>
-                <label for="breed">Breed:</label>
-                <select name="breed" required onchange="toggleOtherBreedInput(this)">
-                    <option value="" style="color: gray;" disabled selected>Select a breed</option>
-                    <option value="Labrador">Labrador</option>
-                    <option value="German Shepherd">German Shepherd</option>
-                    <option value="Golden Retriever">Golden Retriever</option>
-                    <option value="Bulldog">Bulldog</option>
-                    <option value="Beagle">Beagle</option>
-                    <option value="Poodle">Poodle</option>
-                    <option value="Rottweiler">Rottweiler</option>
-                    <option value="Yorkshire Terrier">Yorkshire Terrier</option>
-                    <option value="Dachshund">Dachshund</option>
-                    <option value="Siberian Husky">Siberian Husky</option>
-                    <option value="Others">Others</option> <!-- Added Others option -->
-                </select>
-                <div class="other-breed-input" id="other-breed-input">
-                    <br>
-                    <label>Specify Breed: </label>
-                    <input type="text" name="other_breed">
-                </div>
+                <label for="petbreed">Breed:</label>
+                <input type="text" id="petbreed" name="petbreed" placeholder="Type your pet breed..." autocomplete="off" required>
+                <ul id="breed-autocomplete-results"></ul>
                 <br><br>
                 <label>Gender:</label>
-                    <select name="sex" required>
+                    <select name="petgender" required>
                         <option value="" style="color: gray;" disabled selected>Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -88,7 +62,7 @@
                 <ul id="autocomplete-results" class="autocomplete-dropdown"></ul>
                 <br><br>
                 <div style="text-align: center;">
-                    <input type="submit" value="Submit" class="create-profile-btn">
+                    <input type="submit" value="Create Pet Profile" class="create-profile-btn">
                 </div>
             </div>
         </form>
@@ -133,6 +107,48 @@
                     });
             } else {
                 resultsDropdown.innerHTML = '';
+            }
+        });
+    
+        // Autocomplete for Pet Breed
+        const breedInput = document.getElementById('petbreed');
+        const breedDropdown = document.getElementById('breed-autocomplete-results');
+
+        const breeds = [
+            "Labrador Retriever", "German Shepherd", "Golden Retriever", 
+            "Bulldog", "Beagle", "Poodle", "Rottweiler", 
+            "Yorkshire Terrier", "Boxer", "Dachshund", 
+            "Siberian Husky", "Persian Cat", "Siamese Cat",
+            "Maine Coon", "Bengal", "Sphynx", "Russian Blue",
+            "Shih Tzu", "Chihuahua", "Akita", "Pomeranian",
+            "Border Collie", "Doberman Pinscher", "Newfoundland", "Bernese Mountain Dog", 
+            "Great Dane", "Australian Shepherd", "Shetland Sheepdog", "Collie", "Pembroke Welsh Corgi", 
+            "Cocker Spaniel", "Irish Setter", "Pointer", "Maltese", "Pug", "Cavalier King Charles Spaniel", 
+            "Havanese", "Greyhound", "Basset Hound", "Afghan Hound", "Ragdoll", "Abyssinian", "British Shorthair", 
+            "Scottish Fold", "Persian", "Himalayan", "Aspin (Asong Pinoy)", "Puspin (Pusang Pinoy)"
+        ];
+
+        breedInput.addEventListener('input', () => {
+            const query = breedInput.value.trim().toLowerCase();
+            breedDropdown.innerHTML = '';
+
+            if (query.length > 1) {
+                const matches = breeds.filter(breed => breed.toLowerCase().includes(query));
+                matches.forEach(match => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = match;
+                    listItem.onclick = () => {
+                        breedInput.value = match;
+                        breedDropdown.innerHTML = '';
+                    };
+                    breedDropdown.appendChild(listItem);
+                });
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!breedInput.contains(event.target) && !breedDropdown.contains(event.target)) {
+                breedDropdown.innerHTML = '';
             }
         });
 
