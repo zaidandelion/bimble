@@ -302,6 +302,46 @@ cursor: pointer;
   border: 2px solid black
 }
 
+.notif-read-all{
+  margin-top: 25px;
+  background-color: #D6B68e;
+  border-radius: 25px;
+  border: none;
+  width: 10%;
+}
+
+.notif-clear-all{
+  margin-top: 25px;
+  color: white;
+  margin-left: 25px;
+  background-color: #335288;
+  border-radius: 25px;
+  border: none;
+  width: 10%;
+}
+
+.notification-list ul {
+  list-style-type: none; /* Remove default bullet points */
+  padding: 0 20px 0 20px; 
+}
+
+.notification-list li {
+  background-color: #f9f9f9; /* Light background for each notification */
+  border: 1px solid #ddd; /* Light border around each notification */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside each notification */
+  margin: 5px 0; /* Space between notifications */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.notification-list li:hover {
+  background-color: #e0e0e0; /* Change background on hover */
+}
+
+.notification-list li.read {
+  color: #999; /* Change text color for read notifications */
+}
+
 @media (max-width: 800px) {
   .flex-container {
       flex-direction: column;
